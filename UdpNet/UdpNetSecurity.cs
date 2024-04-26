@@ -38,7 +38,7 @@ namespace MWetzko
 
 		public static void PasswordToKeyIV(string password, byte[] salt, int iterations, int keysize, int blocksize, out byte[] key, out byte[] iv)
 		{
-			using (Rfc2898DeriveBytes rfc2898 = new Rfc2898DeriveBytes(password, salt, iterations))
+			using (Rfc2898DeriveBytes rfc2898 = new Rfc2898DeriveBytes(password, salt, iterations, HashAlgorithmName.SHA256))
 			{
 				key = rfc2898.GetBytes(keysize / 8);
 				iv = rfc2898.GetBytes(blocksize / 8);
