@@ -13,7 +13,7 @@ using System.Threading;
 
 namespace MWetzko
 {
-	public unsafe class UdpNetChannel : IDisposable
+	unsafe class UdpNetChannel : IDisposable
 	{
 		volatile uint mNumberRead;
 		ManualResetEventSlim mReadWait;
@@ -93,7 +93,7 @@ namespace MWetzko
 			}
 		}
 
-		public UdpNetRemote Remote { get; private set; }
+		internal UdpNetRemote Remote { get; private set; }
 		public IPEndPoint RemoteEndPoint { get; private set; }
 		public ushort LocalPort { get; private set; }
 		public ushort RemotePort { get; private set; }

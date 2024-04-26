@@ -21,7 +21,7 @@ namespace MWetzko
 			this.WriteTimeout = 15000;
 		}
 
-		public UdpNetChannel Channel { get; private set; }
+		internal UdpNetChannel Channel { get; private set; }
 		public Guid RemoteSocketId => Channel.Remote.SocketId;
 		public ushort LocalPort => Channel.LocalPort;
 		public ushort RemotePort => Channel.RemotePort;

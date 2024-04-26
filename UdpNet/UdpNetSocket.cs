@@ -8,7 +8,6 @@
 // SOFTWARE.
 
 using System;
-using System.Buffers;
 using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
@@ -157,7 +156,7 @@ namespace MWetzko
 			}
 		}
 
-		public ConcurrentDictionary<Guid, UdpNetRemote> RemoteSockets { get; private set; }
+		internal ConcurrentDictionary<Guid, UdpNetRemote> RemoteSockets { get; private set; }
 
 		protected virtual void HandleMagicData(ArraySegment<byte> data, IPEndPoint endPoint, uint magic, Guid socketId)
 		{

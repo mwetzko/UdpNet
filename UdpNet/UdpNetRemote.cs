@@ -15,7 +15,7 @@ using System.Security.Cryptography;
 
 namespace MWetzko
 {
-	public partial class UdpNetRemote : IDisposable
+	partial class UdpNetRemote : IDisposable
 	{
 		bool mDisposed;
 		ushort mLocalPort = ushort.MaxValue;
