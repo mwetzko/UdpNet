@@ -11,7 +11,7 @@ namespace MWetzko
 {
 	static class UdpNetExtension
 	{
-		internal static bool Has(this UdpNetFlags flags, UdpNetFlags flag)
+		public static bool Has(this UdpNetFlags flags, UdpNetFlags flag)
 		{
 			return (flags & flag) == flag;
 		}
