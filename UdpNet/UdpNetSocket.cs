@@ -337,6 +337,16 @@ namespace MWetzko
 			return mSocket.SendTo(buffer, offset, count, SocketFlags.None, remoteEndPoint);
 		}
 
+		public int Broadcast(byte[] buffer, int port)
+		{
+			return this.Send(buffer, new IPEndPoint(IPAddress.Broadcast, port));
+		}
+
+		public int Broadcast(byte[] buffer, int offset, int count, int port)
+		{
+			return this.Send(buffer, offset, count, new IPEndPoint(IPAddress.Broadcast, port));
+		}
+
 		internal int Send(byte[] buffer, int offset, int count, IPEndPoint remoteEndPoint, ManualResetEventSlim ack)
 		{
 			ack.Reset();
