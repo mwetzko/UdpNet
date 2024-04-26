@@ -143,7 +143,7 @@ namespace MWetzko
 
 		internal int Read(byte[] buffer, int offset, int count, int timeout)
 		{
-			EnsureDisconnected();
+			EnsureConnected();
 
 			do
 			{
@@ -184,7 +184,7 @@ namespace MWetzko
 
 		internal void WriteFrame(byte[] buffer, int offset, int count)
 		{
-			EnsureDisconnected();
+			EnsureConnected();
 
 			this.Remote.Socket.WriteFrame(this, buffer, offset, count, UdpNetFlags.None, mNumberWrite);
 
@@ -193,7 +193,7 @@ namespace MWetzko
 
 		internal int WriteStreamFrameWithAck(byte[] buffer, int offset, int count, int timeout)
 		{
-			EnsureDisconnected();
+			EnsureConnected();
 
 			int num = this.Remote.Socket.WriteFrame(this, buffer, offset, count, UdpNetFlags.None, mNumberWrite, mWriteWait);
 
@@ -231,7 +231,7 @@ namespace MWetzko
 			wait?.Dispose();
 		}
 
-		internal void EnsureDisconnected()
+		internal void EnsureConnected()
 		{
 			if (IsDisconnected)
 			{
