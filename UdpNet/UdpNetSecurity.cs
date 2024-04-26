@@ -14,8 +14,6 @@ namespace MWetzko
 {
 	static class UdpNetSecurity
 	{
-		static readonly byte[] SALT = { 3, 9, 124, 214, 2, 239, 71, 76, 137, 46, 71, 77, 92, 162, 70, 144 };
-
 		public static int TransformFinalBlockLocked(ICryptoTransform transform, ArraySegment<byte> data)
 		{
 			return TransformFinalBlockLocked(transform, data.Array, data.Offset, data.Count);
@@ -33,9 +31,9 @@ namespace MWetzko
 			}
 		}
 
-		public static void PasswordToKeyIV(string password, int keysize, int blocksize, out byte[] key, out byte[] iv)
+		public static void PasswordToKeyIV(string password, byte[] salt, int keysize, int blocksize, out byte[] key, out byte[] iv)
 		{
-			PasswordToKeyIV(password, SALT, 1000, keysize, blocksize, out key, out iv);
+			PasswordToKeyIV(password, salt, 1000, keysize, blocksize, out key, out iv);
 		}
 
 		public static void PasswordToKeyIV(string password, byte[] salt, int iterations, int keysize, int blocksize, out byte[] key, out byte[] iv)

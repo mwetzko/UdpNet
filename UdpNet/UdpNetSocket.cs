@@ -34,10 +34,11 @@ namespace MWetzko
 			}
 		}
 
-		public UdpNetSocket(uint magic, Guid socketId)
+		public UdpNetSocket(uint magic, Guid socketId, Guid secureSalt)
 		{
 			this.Magic = magic;
 			this.SocketId = socketId;
+			this.Salt = secureSalt.ToByteArray();
 			this.RemoteSockets = new ConcurrentDictionary<Guid, UdpNetRemote>();
 		}
 
@@ -75,7 +76,7 @@ namespace MWetzko
 
 		public uint Magic { get; private set; }
 		public Guid SocketId { get; private set; }
-
+		internal byte[] Salt { get; private set; }
 		public IPEndPoint LocalEndPoint => (IPEndPoint)mSocket.LocalEndPoint;
 
 		public void Start(int port)

@@ -92,7 +92,7 @@ namespace MWetzko
 			{
 				using (var crypto = Aes.Create())
 				{
-					UdpNetSecurity.PasswordToKeyIV(password, crypto.KeySize, crypto.BlockSize, out byte[] key, out byte[] iv);
+					UdpNetSecurity.PasswordToKeyIV(password, this.Socket.Salt, crypto.KeySize, crypto.BlockSize, out byte[] key, out byte[] iv);
 
 					crypto.Padding = PaddingMode.PKCS7;
 					crypto.Key = key;
