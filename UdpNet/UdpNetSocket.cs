@@ -11,7 +11,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
-using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
@@ -122,7 +121,7 @@ namespace MWetzko
 		{
 			// pass socket explicitly to allow stop method
 			// using mSocket may result in a race situation
-			BufferSocketPair pair = new BufferSocketPair();
+			UdpNetBufferSocketPair pair = new UdpNetBufferSocketPair();
 
 			pair.Buffer = new byte[MTU];
 			pair.Socket = socket;
@@ -135,7 +134,7 @@ namespace MWetzko
 
 		void EndReceive(IAsyncResult ar)
 		{
-			var state = ar.AsyncState as BufferSocketPair;
+			var state = ar.AsyncState as UdpNetBufferSocketPair;
 
 			int num = state.Socket.EndReceiveFrom(ar, ref state.EndPoint);
 
@@ -143,11 +142,11 @@ namespace MWetzko
 
 			fixed (byte* b = state.Buffer)
 			{
-				var hdr = (Hdr*)b;
+				var hdr = (UdpNetHdr*)b;
 
 				if (hdr->Magic == this.Magic)
 				{
-					this.HandleMagicData(new ArraySegment<byte>(state.Buffer, sizeof(Hdr), num - sizeof(Hdr)), (IPEndPoint)state.EndPoint, hdr->Magic, hdr->SocketId);
+					this.HandleMagicData(new ArraySegment<byte>(state.Buffer, sizeof(UdpNetHdr), num - sizeof(UdpNetHdr)), (IPEndPoint)state.EndPoint, hdr->Magic, hdr->SocketId);
 				}
 				else
 				{
@@ -166,9 +165,9 @@ namespace MWetzko
 
 				fixed (byte* b = &data.Array[data.Offset])
 				{
-					var hdr = (SecureHdr*)b;
+					var hdr = (UdpNetSecureHdr*)b;
 
-					this.HandleEncryptedChannelData(new ArraySegment<byte>(data.Array, data.Offset + sizeof(SecureHdr), num - sizeof(SecureHdr)), remote, endPoint, (UdpNetFlags)(uint)hdr->Flags, hdr->SourcePort, hdr->DestinationPort, hdr->Order);
+					this.HandleEncryptedChannelData(new ArraySegment<byte>(data.Array, data.Offset + sizeof(UdpNetSecureHdr), num - sizeof(UdpNetSecureHdr)), remote, endPoint, (UdpNetFlags)(uint)hdr->Flags, hdr->SourcePort, hdr->DestinationPort, hdr->Order);
 				}
 			}
 		}
@@ -303,15 +302,15 @@ namespace MWetzko
 		{
 			fixed (byte* b = &mtu[0])
 			{
-				var hdr = (Hdr*)b;
+				var hdr = (UdpNetHdr*)b;
 
 				hdr->Magic = magic;
 				hdr->SocketId = this.SocketId;
 			}
 
-			fixed (byte* b = &mtu[sizeof(Hdr)])
+			fixed (byte* b = &mtu[sizeof(UdpNetHdr)])
 			{
-				var hdr = (SecureHdr*)b;
+				var hdr = (UdpNetSecureHdr*)b;
 
 				hdr->Flags = (uint)flags;
 				hdr->SourcePort = sourcePort;
@@ -321,10 +320,10 @@ namespace MWetzko
 
 			if (count > 0)
 			{
-				Array.Copy(buffer, offset, mtu, sizeof(Hdr) + sizeof(SecureHdr), count);
+				Array.Copy(buffer, offset, mtu, sizeof(UdpNetHdr) + sizeof(UdpNetSecureHdr), count);
 			}
 
-			return sizeof(Hdr) + UdpNetSecurity.TransformFinalBlockLocked(encrypter, mtu, sizeof(Hdr), sizeof(SecureHdr) + count);
+			return sizeof(UdpNetHdr) + UdpNetSecurity.TransformFinalBlockLocked(encrypter, mtu, sizeof(UdpNetHdr), sizeof(UdpNetSecureHdr) + count);
 		}
 
 		public int Send(byte[] buffer, IPEndPoint remoteEndPoint)
@@ -386,29 +385,6 @@ namespace MWetzko
 			int num = GetSecureFrame(MtuBuffer, channel.Remote.Encrypter, null, 0, 0, this.Magic, UdpNetFlags.Ack | flags | channel.Flags, channel.LocalPort, channel.RemotePort, order);
 
 			this.Send(MtuBuffer, 0, num, endPoint);
-		}
-
-		[StructLayout(LayoutKind.Sequential, Pack = 1)]
-		internal struct Hdr
-		{
-			public UdpNetUInt32 Magic;
-			public UdpNetGuid SocketId;
-		}
-
-		[StructLayout(LayoutKind.Sequential, Pack = 1)]
-		internal struct SecureHdr
-		{
-			public UdpNetUInt32 Flags;
-			public UdpNetUInt16 SourcePort;
-			public UdpNetUInt16 DestinationPort;
-			public UdpNetUInt32 Order;
-		}
-
-		class BufferSocketPair
-		{
-			public byte[] Buffer;
-			public Socket Socket;
-			public EndPoint EndPoint;
 		}
 	}
 }

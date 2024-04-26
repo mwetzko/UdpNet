@@ -111,7 +111,7 @@ namespace MWetzko
 
 			int frm = (UdpNetSocket.MTU / blockBytes) * blockBytes;
 
-			return frm - sizeof(UdpNetSocket.Hdr) - sizeof(UdpNetSocket.SecureHdr);
+			return frm - sizeof(UdpNetHdr) - sizeof(UdpNetSecureHdr);
 		}
 
 		void SetCrypters(ICryptoTransform encrypter, ICryptoTransform decrypter)

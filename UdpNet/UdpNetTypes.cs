@@ -8,6 +8,8 @@
 // SOFTWARE.
 
 using System;
+using System.Net;
+using System.Net.Sockets;
 using System.Runtime.InteropServices;
 
 namespace MWetzko
@@ -175,5 +177,28 @@ namespace MWetzko
 		ChannelAsStream = 0x4,
 		Disconnect = 0x8,
 		IsClientCall = 0x10000,
+	}
+
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	struct UdpNetHdr
+	{
+		public UdpNetUInt32 Magic;
+		public UdpNetGuid SocketId;
+	}
+
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	struct UdpNetSecureHdr
+	{
+		public UdpNetUInt32 Flags;
+		public UdpNetUInt16 SourcePort;
+		public UdpNetUInt16 DestinationPort;
+		public UdpNetUInt32 Order;
+	}
+
+	class UdpNetBufferSocketPair
+	{
+		public byte[] Buffer;
+		public Socket Socket;
+		public EndPoint EndPoint;
 	}
 }
