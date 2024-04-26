@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 namespace MWetzko
 {
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	public struct UdpNetInt16
+	internal struct UdpNetInt16
 	{
 		public short BigEndianValue;
 
@@ -34,7 +34,7 @@ namespace MWetzko
 	}
 
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	public struct UdpNetUInt16
+	internal struct UdpNetUInt16
 	{
 		public ushort BigEndianValue;
 
@@ -55,7 +55,7 @@ namespace MWetzko
 	}
 
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	public struct UdpNetInt32
+	internal struct UdpNetInt32
 	{
 		public int BigEndianValue;
 
@@ -76,7 +76,7 @@ namespace MWetzko
 	}
 
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	public struct UdpNetUInt32
+	internal struct UdpNetUInt32
 	{
 		public uint BigEndianValue;
 
@@ -97,7 +97,7 @@ namespace MWetzko
 	}
 
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	public struct UdpNetInt64
+	internal struct UdpNetInt64
 	{
 		public long BigEndianValue;
 
@@ -118,7 +118,7 @@ namespace MWetzko
 	}
 
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	public struct UdpNetUInt64
+	internal struct UdpNetUInt64
 	{
 		public ulong BigEndianValue;
 
@@ -139,7 +139,7 @@ namespace MWetzko
 	}
 
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	public unsafe struct UdpNetGuid
+	internal unsafe struct UdpNetGuid
 	{
 		public fixed byte Data[16];
 
