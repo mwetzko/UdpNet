@@ -389,11 +389,6 @@ namespace MWetzko
 			this.Send(MtuBuffer, 0, num, endPoint);
 		}
 
-		public IPEndPoint GetPublicAddress(IPEndPoint remoteStunEndPoint)
-		{
-			return UdpNetStun.GetPublicAddress(this, remoteStunEndPoint);
-		}
-
 		[StructLayout(LayoutKind.Sequential, Pack = 1)]
 		internal struct Hdr
 		{
